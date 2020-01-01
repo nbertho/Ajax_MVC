@@ -1,49 +1,49 @@
 $(function functionName() {
 
   // AJOUT DE TACHES
-  $('.new-todo').on('keyup', function(e) {
-    // Si la touche 'enter' est pressée
-    if (e.which === 13) {
+    $('.new-todo').on('keyup', function(e) {
+      // Si la touche 'enter' est pressée
+      if (e.which === 13) {
 
-      // Désactivation du formulaire
-      $(this).attr("disabled", "disabled");
-      // Récupération des données de l'input
-      let inputVal = $(this).val();
+        // Désactivation du formulaire
+        $(this).attr("disabled", "disabled");
+        // Récupération des données de l'input
+        let inputVal = $(this).val();
 
-      // Transaction ajax => Ajout d'une tache
-        $.ajax({
-          url: "tasks/add",
-          data: {
-            task: inputVal
-          },
-          method: 'post',
-        })
+        // Transaction ajax => Ajout d'une tache
+          $.ajax({
+            url: "tasks/add",
+            data: {
+              task: inputVal
+            },
+            method: 'post',
+          })
 
-        // Succes
-        .done(function(reponsePHP){
-          // Définition du code à renvoyer (variable : reponsePHP(id de la task) et inputVal(texte de la tache))
-          let code = `<li class="todo <?php echo ($task['finished']==1)?'completed':''; ?>" data-id="${reponsePHP}">
-                        <div class="view">
-                          <input class="toggle" type="checkbox">
-                          <label>${inputVal}</label>
-                          <button class="destroy"></button>
-                        </div>
-                      </li>`;
-          // Ecriture du code
-          $('.todo-list').prepend(code).find('li:first').hide().slideDown();
-          // Vidage du formulaire
-          $('.new-todo').val('');
-        })
+          // Succes
+          .done(function(reponsePHP){
+            // Définition du code à renvoyer (variable : reponsePHP(id de la task) et inputVal(texte de la tache))
+            let code = `<li class="todo <?php echo ($task['finished']==1)?'completed':''; ?>" data-id="${reponsePHP}">
+                          <div class="view">
+                            <input class="toggle" type="checkbox">
+                            <label>${inputVal}</label>
+                            <button class="destroy"></button>
+                          </div>
+                        </li>`;
+            // Ecriture du code
+            $('.todo-list').prepend(code).find('li:first').hide().slideDown();
+            // Vidage du formulaire
+            $('.new-todo').val('');
+          })
 
-        // Echec
-        .fail(function(){
-          alert('Erreur transaction ajax ajout de taches');
-        });
+          // Echec
+          .fail(function(){
+            alert('Erreur transaction ajax ajout de taches');
+          });
 
-      // Réactivation du formulaire
-      $('.new-todo').removeAttr('disabled');
-    };
-  });
+        // Réactivation du formulaire
+        $('.new-todo').removeAttr('disabled');
+      };
+    });
 
   // SUPPRESSION DE TACHES
     $('.todo-list').on('click', '.destroy', function(event) {
@@ -120,7 +120,53 @@ $(function functionName() {
           }
         })
       }
-    })
+    });
+
+  // VALIDATION DES TACHES EFFECTUEES
+    $('.todo-list').on('click', '.toggle', function() {
+      let that = $(this);
+      let idFinished = $(this).closest('li').attr('data-id');
+      let statutOriginal = $(this).attr("checked");
+      // Définition du statutUpdate en fonction de son statut initial
+      if (statutOriginal === 'checked') {
+        statutUpdate = 0;
+      }
+      else {
+        statutUpdate = 1;
+      }
+      // Transaction Ajax => Statut des taches
+        $.ajax({
+          url: "tasks/toggleFinish",
+          data: {
+            id: idFinished,
+            status: statutUpdate
+          },
+          method: 'post',
+        })
+
+        // Succes
+        .done(function(reponsePHP){
+          that.closest('li').toggleClass('completed');
+          if (statutUpdate === 1) {
+            that.attr('checked', 'checked');
+          }
+          else {
+            that.removeAttr('checked');
+          }
+        })
+
+        // Echec
+        .fail(function(){
+          alert('Erreur transaction ajax');
+        });
+
+
+
+
+
+    });
+
+
 
 //FIN
 });
