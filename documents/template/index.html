@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<title>Tâches à faire</title>
+		<link rel="stylesheet" href="css/base.css">
+		<link rel="stylesheet" href="css/index.css">
+	</head>
+	<body>
+		<section class="todoapp">
+			<header class="header">
+				<h1>A faire</h1>
+				<input class="new-todo" placeholder="Qu'est-ce qui doit être fait?">
+			</header>
+			<section class="main">
+				<input class="toggle-all" type="checkbox">
+				<!-- Liste des tâches -->
+				<ul class="todo-list">
+					<li class="todo" >
+						<div class="view">
+							<input class="toggle" type="checkbox">
+							<label>Titre test</label>
+							<button class="destroy"></button>
+						</div>
+						<input class="edit" type="text">
+					</li>
+				</ul>
+				<!-- Fin de liste des tâches -->
+
+			</section>
+			<footer class="footer">
+				<span class="todo-count">
+					<strong>5</strong>  restantes
+				</span>
+				<ul class="filters">
+					<li><a href="#/all" >Toutes</a></li>
+					<li><a href="#/active">En cours</a></li>
+					<li><a href="#/completed">Terminées</a></li>
+				</ul>
+				<button class="clear-completed">
+					Supprimer les terminées
+				</button>
+			</footer>
+		</section>
+		<footer class="info">
+			<p>Double-click pour editer une tâche</p>
+			<p>Written by <a href="http://evanyou.me">Evan You</a></p>
+			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+		</footer>
+	</body>
+</html>

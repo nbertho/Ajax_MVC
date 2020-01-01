@@ -1,0 +1,32 @@
+#--------------------------------------------------
+# Répertoire : /
+#--------------------------------------------------
+
+# Le serveur doit suivre les liens symboliques :
+Options +FollowSymlinks
+
+# Activation du module de réécriture d'URL :
+RewriteEngine on
+
+#--------------------------------------------------
+# Règles de réécriture d'URL :
+#--------------------------------------------------
+
+  #AJOUT DE TASK:
+    RewriteRule ^tasks\/add$ index.php?tasks=add [L]
+
+  #SUPPRESSION DE TASKS:
+    RewriteRule ^tasks\/delete$ index.php?tasks=delete [L]
+
+  #AJOUT FINI TASKS
+    RewriteRule ^tasks\/toggleFinish$ index.php?tasks=toggleFinish [L]
+
+  #AJOUT FINI TASKS
+    RewriteRule ^tasks\/edit$ index.php?tasks=edit [L]
+
+  #SUPPRESSION DE TOUTES LES TASKS FINIES
+    RewriteRule ^tasks\/deleteFinished$ index.php?tasks=deleteFinished [L]
+
+# --------------------------------------------------
+RewriteCond %{REQUEST_URI} !\.(js|css|jpg|gif|zip|png|pdf)$ [NC]
+RewriteRule ^(.*)$ index.php [L]
