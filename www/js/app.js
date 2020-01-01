@@ -115,14 +115,14 @@ $(function functionName() {
 
               // Echec
               .fail(function(){
-                alert('Erreur transaction ajax');
+                alert('Erreur transaction ajax edition de taches');
               });
           }
         })
       }
     });
 
-  // VALIDATION DES TACHES EFFECTUEES
+  // Changement de statut DES TACHES EFFECTUEES - EN COURS
     $('.todo-list').on('click', '.toggle', function() {
       let that = $(this);
       let idFinished = $(this).closest('li').attr('data-id');
@@ -157,7 +157,7 @@ $(function functionName() {
 
         // Echec
         .fail(function(){
-          alert('Erreur transaction ajax');
+          alert("Erreur transaction ajax changement de statut d'une tache");
         });
 
 
@@ -165,6 +165,36 @@ $(function functionName() {
 
 
     });
+
+  // SUPPRESSION DE TOUTES LES TACHES COMPLETEES
+    $('.footer').on('click', '.clear-completed', function(e) {
+      // Demander une validation
+      let confirmDeleteAllDone = confirm('Etes vous sur de vouloir supprimer toutes les taches déjà effectuées?');
+      if (confirmDeleteAllDone === true) {
+        // Transaction Ajax => Supprimer toutes les taches accomplies
+          $.ajax({
+            url: "tasks/deleteFinished",
+            method: 'post',
+          })
+
+          // Succes
+          .done(function(reponsePHP){
+            $('.todo-list').children('.completed').slideUp(400, function() {
+              $(this).remove();
+            })
+          })
+
+          // Echec
+          .fail(function(){
+            alert('Erreur transaction ajax suppression des taches effectuées');
+          });
+      }
+    })
+
+
+
+
+
 
 
 
