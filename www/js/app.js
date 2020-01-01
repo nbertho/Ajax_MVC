@@ -1,6 +1,6 @@
 $(function functionName() {
 
-  // Fonction d'ajout
+  // AJOUT DE TACHES
   $('.new-todo').on('keyup', function(e) {
     // Si la touche 'enter' est pressée
     if (e.which === 13) {
@@ -10,7 +10,7 @@ $(function functionName() {
       // Récupération des données de l'input
       let inputVal = $(this).val();
 
-      // Transition ajax
+      // Transaction ajax => Ajout d'une tache
         $.ajax({
           url: "tasks/add",
           data: {
@@ -37,13 +37,42 @@ $(function functionName() {
 
         // Echec
         .fail(function(){
-          alert('Erreur transaction ajax');
+          alert('Erreur transaction ajax ajout de taches');
         });
 
       // Réactivation du formulaire
       $('.new-todo').removeAttr('disabled');
-    }
-  })
+    };
+  });
+
+  // SUPPRESSION DE TACHES
+    $('.todo-list').on('click', '.destroy', function(event) {
+      // Récupération de l'id du post
+      let idPostToDelete = $(this).closest('li').attr('data-id');
+      let that = $(this);
+      // Transaction ajax => Suprression d'une tache
+        $.ajax({
+          url: "tasks/delete",
+          data: {
+            id: idPostToDelete
+          },
+          method: 'post',
+        })
+
+        // Succes
+        .done(function(reponsePHP){
+          if (reponsePHP == 1) {
+            that.closest('li').slideUp(400, function() {
+              $(this).remove();
+            })
+          }
+        })
+
+        // Echec
+        .fail(function(){
+          alert('Erreur transaction ajax suppression de taches');
+        });
+    });
 
 //FIN
 });
