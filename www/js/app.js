@@ -74,5 +74,53 @@ $(function functionName() {
         });
     });
 
+  // EDITION DE TACHES
+    $('.todo-list').on('dblclick', 'label', function() {
+      let idPostToEdit = $(this).closest('li').attr('data-id');
+      let dataPostToEdit = $(this).text();
+      let countEditProgress = $('.todo-list').find('.editInProgress').length;
+      let that = $(this);
+      // Ajout de la classe editInProgress à la tache en cours d'edition
+      $(this).closest('li').addClass('editInProgress');
+      // Vérification qu'il n'y a qu'une tache en cours de modification
+      // Sinon, retrait de la classe editInProgress et alert d'un message d'erreur
+      if (countEditProgress !== 0) {
+        $(this).closest('li').removeClass('editInProgress');
+        alert("Attention, une autre tache est en cours d'édition");
+      }
+      else {
+        // Transformtaion en input
+        $(this).closest('label').html(`<input class="inputEdit" type="texte" value="${dataPostToEdit}">`);
+        $('.editInProgress').on("keyup", function(e) {
+          if (e.which === 13) {
+            let editId = that.closest('li').attr('data-id');
+            let editInput = $(this).find('.inputEdit').val();
+            //On désactive le formulaire
+            $(this).attr("disabled", "disabled");
+            // Transaction ajax => Edition d'une tache
+              $.ajax({
+                url: "tasks/edit",
+                data: {
+                  id: editId,
+                  text: editInput
+                },
+                method: 'post',
+              })
+
+              // Succes
+              .done(function(reponsePHP){
+                that.closest('label').text(editInput);
+                that.closest('li').removeClass('editInProgress');
+              })
+
+              // Echec
+              .fail(function(){
+                alert('Erreur transaction ajax');
+              });
+          }
+        })
+      }
+    })
+
 //FIN
 });
